@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova Collection — Тапсырыс беру</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #050810;
+      --surface: #0d1117;
+      --surface2: #161b27;
+      --border: rgba(255,255,255,0.07);
+      --accent1: #7c6af7;
+      --accent2: #f472b6;
+      --accent3: #34d399;
+      --text: #f0f4ff;
+      --muted: #6b7594;
+      --error: #ef4444;
+      --success: #34d399;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 20% 20%, rgba(124,106,247,0.12), transparent),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(244,114,182,0.08), transparent),
+        radial-gradient(ellipse 40% 60% at 60% 30%, rgba(52,211,153,0.04), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 0 40px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(24px);
+      background: rgba(5,8,16,0.82);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 18px rgba(124,106,247,0.4);
+      font-size: 18px;
+    }
+    .logo-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff, var(--accent1));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lang-switcher {
+      display: flex;
+      gap: 4px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+    }
+    .lang-btn {
+      padding: 5px 12px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 7px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      color: #fff;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 52px 24px 80px;
+    }
+
+    .page-intro {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+    .page-intro .label {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      background: rgba(124,106,247,0.12);
+      border: 1px solid rgba(124,106,247,0.25);
+      font-size: 11px;
+      color: var(--accent1);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+    .page-intro h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 5vw, 44px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #fff 0%, var(--accent1) 50%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .page-intro p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3));
+    }
+
+    .form-section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .field-row.single { grid-template-columns: 1fr; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .field label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.3px;
+    }
+    .field label .req {
+      color: var(--accent2);
+      margin-left: 3px;
+    }
+    .field input,
+    .field select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 16px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      -webkit-appearance: none;
+    }
+    .field select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7594' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+    .field input::placeholder { color: rgba(107,117,148,0.5); }
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--accent1);
+      box-shadow: 0 0 0 3px rgba(124,106,247,0.12);
+    }
+    .field input.error,
+    .field select.error {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+    }
+    .field .err-msg {
+      font-size: 11px;
+      color: var(--error);
+      display: none;
+    }
+    .field.has-error .err-msg { display: block; }
+
+    .item-row {
+      display: grid;
+      grid-template-columns: 1fr 90px 110px auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 10px;
+    }
+    .remove-btn {
+      width: 40px; height: 40px;
+      border: 1px solid rgba(239,68,68,0.25);
+      background: rgba(239,68,68,0.08);
+      color: #ef4444;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .remove-btn:hover {
+      background: rgba(239,68,68,0.2);
+      border-color: rgba(239,68,68,0.5);
+    }
+
+    .add-item-btn {
+      width: 100%;
+      padding: 11px;
+      border: 1px dashed rgba(124,106,247,0.3);
+      background: rgba(124,106,247,0.05);
+      color: var(--accent1);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 4px;
+    }
+    .add-item-btn:hover {
+      background: rgba(124,106,247,0.1);
+      border-color: rgba(124,106,247,0.5);
+    }
+
+    .total-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: var(--surface2);
+      border-radius: 14px;
+      margin-top: 16px;
+      border: 1px solid var(--border);
+    }
+    .total-label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .total-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent3);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+      margin-top: 10px;
+      letter-spacing: 0.3px;
+    }
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(124,106,247,0.4); }
+    .submit-btn:hover::before { opacity: 1; }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .success-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,8,16,0.92);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(12px);
+    }
+    .success-overlay.show { display: flex; }
+    .success-box {
+      text-align: center;
+      padding: 48px 40px;
+      background: var(--surface);
+      border: 1px solid rgba(52,211,153,0.3);
+      border-radius: 28px;
+      max-width: 380px;
+      animation: scaleIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+    }
+    .success-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent3), #06b6d4);
+      border-radius: 28px 28px 0 0;
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .success-icon {
+      width: 64px; height: 64px;
+      background: rgba(52,211,153,0.12);
+      border: 1px solid rgba(52,211,153,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 20px;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(52,211,153,0.3); }
+      50% { box-shadow: 0 0 0 12px rgba(52,211,153,0); }
+    }
+    .success-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+    .success-sub {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .success-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-bottom: 24px;
+    }
+    .back-btn {
+      display: inline-block;
+      padding: 13px 28px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { border-color: var(--accent1); color: var(--accent1); }
+
+    @media (max-width: 600px) {
+      header { padding: 0 20px; }
+      main { padding: 32px 16px 60px; }
+      .form-card { padding: 24px 20px; }
+      .field-row { grid-template-columns: 1fr; }
+      .item-row { grid-template-columns: 1fr 72px 90px auto; gap: 7px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="./index.html" class="logo">
+    <div class="logo-mark">✦</div>
+    <span class="logo-name">Nova Collection</span>
+  </a>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('kk')">ҚАЗ</button>
+    <button class="lang-btn" onclick="setLang('ru')">РУС</button>
+    <button class="lang-btn" onclick="setLang('en')">ENG</button>
+  </div>
+</header>
+
+<main>
+  <div class="page-intro">
+    <div class="label" id="lbl-badge">Nova Collection</div>
+    <h1 id="lbl-title">Тапсырыс беру</h1>
+    <p id="lbl-sub">Деректеріңізді толтырыңыз, менеджер хабарласады</p>
+  </div>
+
+  <div class="form-card">
+    <div class="form-section">
+      <div class="section-title" id="lbl-section-contact">Байланыс деректері</div>
+      <div class="field-row">
+        <div class="field" id="f-fname">
+          <label><span id="lbl-fname">Аты</span><span class="req">*</span></label>
+          <input type="text" id="inp-fname" placeholder="Мысалы: Айгүл" autocomplete="given-name"/>
+          <span class="err-msg" id="err-fname"></span>
+        </div>
+        <div class="field" id="f-lname">
+          <label><span id="lbl-lname">Тегі</span><span class="req">*</span></label>
+          <input type="text" id="inp-lname" placeholder="Мысалы: Сейткали" autocomplete="family-name"/>
+          <span class="err-msg" id="err-lname"></span>
+        </div>
+      </div>
+      <div class="field-row" style="margin-top:14px">
+        <div class="field" id="f-phone">
+          <label><span id="lbl-phone">Телефон</span><span class="req">*</span></label>
+          <input type="tel" id="inp-phone" placeholder="+7 777 000 00 00" autocomplete="tel"/>
+          <span class="err-msg" id="err-phone"></span>
+        </div>
+        <div class="field">
+          <label id="lbl-email">Email</label>
+          <input type="email" id="inp-email" placeholder="name@example.com" autocomplete="email"/>
+        </div>
+      </div>
+      <div class="field-row single" style="margin-top:14px">
+        <div class="field" id="f-city">
+          <label><span id="lbl-city">Қала</span><span class="req">*</span></label>
+          <select id="inp-city">
+            <option value="">— таңдаңыз —</option>
+            <option>Алматы</option>
+            <option>Астана</option>
+            <option>Шымкент</option>
+            <option>Қарағанды</option>
+            <option>Атырау</option>
+            <option>Ақтөбе</option>
+            <option>Тараз</option>
+            <option>Павлодар</option>
+            <option>Өскемен</option>
+            <option>Семей</option>
+            <option>Орал</option>
+          </select>
+          <span class="err-msg" id="err-city"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title" id="lbl-section-items">Тауарлар</div>
+      <div id="items-container"></div>
+      <button class="add-item-btn" onclick="addItem()" id="btn-add-item">+ Тауар қосу</button>
+
+      <div class="total-bar">
+        <span class="total-label" id="lbl-total">Жалпы сомасы</span>
+        <span class="total-value" id="total-display">0 ₸</span>
+      </div>
+    </div>
+
+    <button class="submit-btn" onclick="submitOrder()" id="submit-btn">
+      <span id="submit-text">Тапсырыс беру</span>
+    </button>
+  </div>
+</main>
+
+<div class="success-overlay" id="success-overlay">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <div class="success-title" id="suc-title">Тапсырыс қабылданды!</div>
+    <div class="success-amount" id="suc-amount"></div>
+    <div class="success-sub" id="suc-sub">Менеджер жақын арада хабарласады</div>
+    <a href="./order.html" class="back-btn" id="suc-btn">Жаңа тапсырыс</a>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://hxwsdrhimzychzhavajb.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4d3NkcmhpbXp5Y2h6aGF2YWpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwNTU0NDMsImV4cCI6MjA5MTYzMTQ0M30.tdwzAWqb5AeQuaOkh2KmnlWtAaEgUZSErZv9o_oyFyw";
+
+const T = {
+  kk: {
+    badge: "Nova Collection",
+    title: "Тапсырыс беру",
+    sub: "Деректеріңізді толтырыңыз, менеджер хабарласады",
+    secContact: "Байланыс деректері",
+    secItems: "Тауарлар",
+    fname: "Аты", lname: "Тегі", phone: "Телефон", city: "Қала",
+    itemName: "Тауар атауы", qty: "Саны", price: "Бағасы (₸)",
+    addItem: "+ Тауар қосу",
+    total: "Жалпы сомасы",
+    submit: "Тапсырыс беру",
+    loading: "Жіберілуде...",
+    sucTitle: "Тапсырыс қабылданды!",
+    sucSub: "Менеджер жақын арада хабарласады",
+    sucBtn: "Жаңа тапсырыс",
+    cityPlaceholder: "— таңдаңыз —",
+    itemPlaceholder: "Мысалы: Жайма",
+    errRequired: "Міндетті өріс",
+    errPhone: "Телефон нөмірін дұрыс енгізіңіз",
+    errItems: "Кемінде 1 тауар қосыңыз",
+    errItemName: "Тауар атауын енгізіңіз",
+    errPrice: "Бағасын енгізіңіз",
+  },
+  ru: {
+    badge: "Nova Collection",
+    title: "Оформить заказ",
+    sub: "Заполните данные, менеджер свяжется с вами",
+    secContact: "Контактные данные",
+    secItems: "Товары",
+    fname: "Имя", lname: "Фамилия", phone: "Телефон", city: "Город",
+    itemName: "Название товара", qty: "Кол-во", price: "Цена (₸)",
+    addItem: "+ Добавить товар",
+    total: "Итого",
+    submit: "Оформить заказ",
+    loading: "Отправляем...",
+    sucTitle: "Заказ принят!",
+    sucSub: "Менеджер свяжется с вами в ближайшее время",
+    sucBtn: "Новый заказ",
+    cityPlaceholder: "— выберите —",
+    itemPlaceholder: "Например: Жайма",
+    errRequired: "Обязательное поле",
+    errPhone: "Введите корректный номер",
+    errItems: "Добавьте хотя бы 1 товар",
+    errItemName: "Введите название товара",
+    errPrice: "Введите цену",
+  },
+  en: {
+    badge: "Nova Collection",
+    title: "Place an Order",
+    sub: "Fill in your details, a manager will contact you",
+    secContact: "Contact Details",
+    secItems: "Items",
+    fname: "First Name", lname: "Last Name", phone: "Phone", city: "City",
+    itemName: "Product Name", qty: "Qty", price: "Price (₸)",
+    addItem: "+ Add Item",
+    total: "Total",
+    submit: "Place Order",
+    loading: "Sending...",
+    sucTitle: "Order Received!",
+    sucSub: "A manager will contact you shortly",
+    sucBtn: "New Order",
+    cityPlaceholder: "— select —",
+    itemPlaceholder: "E.g. Jayma",
+    errRequired: "Required field",
+    errPhone: "Enter a valid phone number",
+    errItems: "Add at least 1 item",
+    errItemName: "Enter product name",
+    errPrice: "Enter price",
+  }
+};
+
+let lang = "kk";
+let itemCount = 0;
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll(".lang-btn").forEach(b => b.classList.remove("active"));
+  document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`).classList.add("active");
+  applyTranslations();
+}
+
+function applyTranslations() {
+  const t = T[lang];
+  document.getElementById("lbl-badge").textContent = t.badge;
+  document.getElementById("lbl-title").textContent = t.title;
+  document.getElementById("lbl-sub").textContent = t.sub;
+  document.getElementById("lbl-section-contact").textContent = t.secContact;
+  document.getElementById("lbl-section-items").textContent = t.secItems;
+  document.getElementById("lbl-fname").textContent = t.fname;
+  document.getElementById("lbl-lname").textContent = t.lname;
+  document.getElementById("lbl-phone").textContent = t.phone;
+  document.getElementById("lbl-email").textContent = "Email";
+  document.getElementById("lbl-city").textContent = t.city;
+  document.getElementById("btn-add-item").textContent = t.addItem;
+  document.getElementById("lbl-total").textContent = t.total;
+  document.getElementById("submit-text").textContent = t.submit;
+  document.getElementById("inp-city").options[0].text = t.cityPlaceholder;
+  document.getElementById("suc-title").textContent = t.sucTitle;
+  document.getElementById("suc-sub").textContent = t.sucSub;
+  document.getElementById("suc-btn").textContent = t.sucBtn;
+  // update item placeholders
+  document.querySelectorAll(".item-name-input").forEach(inp => inp.placeholder = t.itemPlaceholder);
+  document.querySelectorAll(".item-label-name").forEach(el => el.textContent = t.itemName);
+  document.querySelectorAll(".item-label-qty").forEach(el => el.textContent = t.qty);
+  document.querySelectorAll(".item-label-price").forEach(el => el.textContent = t.price);
+}
+
+function addItem() {
+  const t = T[lang];
+  const id = ++itemCount;
+  const container = document.getElementById("items-container");
+  const div = document.createElement("div");
+  div.className = "item-row";
+  div.id = `item-${id}`;
+  div.innerHTML = `
+    <div class="field">
+      <label class="item-label-name">${t.itemName}</label>
+      <input class="item-name-input" type="text" placeholder="${t.itemPlaceholder}" oninput="calcTotal()"/>
+    </div>
+    <div class="field">
+      <label class="item-label-qty">${t.qty}</label>
+      <input type="number" min="1" value="1" oninput="calcTotal()"/>
+    </div>
+    <div class="field">
+      <label class="item-label-price">${t.price}</label>
+      <input type="number" min="0" placeholder="0" oninput="calcTotal()"/>
+    </div>
+    <button class="remove-btn" onclick="removeItem(${id})" title="Жою">×</button>
+  `;
+  container.appendChild(div);
+  calcTotal();
+}
+
+function removeItem(id) {
+  const el = document.getElementById(`item-${id}`);
+  if (el) { el.remove(); calcTotal(); }
+}
+
+function calcTotal() {
+  let total = 0;
+  document.querySelectorAll(".item-row").forEach(row => {
+    const inputs = row.querySelectorAll("input[type=number]");
+    const qty = parseFloat(inputs[0]?.value) || 0;
+    const price = parseFloat(inputs[1]?.value) || 0;
+    total += qty * price;
+  });
+  document.getElementById("total-display").textContent =
+    new Intl.NumberFormat("ru-RU").format(Math.round(total)) + " ₸";
+  return total;
+}
+
+function getUTM() {
+  const p = new URLSearchParams(location.search);
+  return p.get("utm_source") || "direct";
+}
+
+function validate() {
+  const t = T[lang];
+  let ok = true;
+
+  function check(fieldId, inputId, condition, msg) {
+    const f = document.getElementById(fieldId);
+    const inp = document.getElementById(inputId);
+    if (!condition) {
+      f.classList.add("has-error");
+      inp.classList.add("error");
+      document.getElementById("err-" + inputId.replace("inp-","")).textContent = msg;
+      ok = false;
+    } else {
+      f.classList.remove("has-error");
+      inp.classList.remove("error");
+    }
+  }
+
+  const fname = document.getElementById("inp-fname").value.trim();
+  const lname = document.getElementById("inp-lname").value.trim();
+  const phone = document.getElementById("inp-phone").value.trim();
+  const city = document.getElementById("inp-city").value;
+
+  check("f-fname","inp-fname", fname.length >= 2, t.errRequired);
+  check("f-lname","inp-lname", lname.length >= 2, t.errRequired);
+  check("f-phone","inp-phone", phone.length >= 7, t.errPhone);
+  check("f-city","inp-city", city !== "", t.errRequired);
+
+  const items = document.querySelectorAll(".item-row");
+  if (!items.length) { alert(t.errItems); ok = false; }
+
+  return ok;
+}
+
+async function submitOrder() {
+  if (!validate()) return;
+
+  const t = T[lang];
+  const btn = document.getElementById("submit-btn");
+  const txt = document.getElementById("submit-text");
+
+  btn.disabled = true;
+  txt.innerHTML = `<span class="spinner"></span>${t.loading}`;
+
+  const items = [];
+  let total = 0;
+  document.querySelectorAll(".item-row").forEach(row => {
+    const name = row.querySelector(".item-name-input").value.trim();
+    const inputs = row.querySelectorAll("input[type=number]");
+    const qty = parseFloat(inputs[0]?.value) || 1;
+    const price = parseFloat(inputs[1]?.value) || 0;
+    items.push({ name, qty, price });
+    total += qty * price;
+  });
+
+  const row = {
+    crm_id: "form-" + Date.now(),
+    first_name: document.getElementById("inp-fname").value.trim(),
+    last_name: document.getElementById("inp-lname").value.trim(),
+    phone: document.getElementById("inp-phone").value.trim(),
+    email: document.getElementById("inp-email").value.trim(),
+    status: "new",
+    total_price: Math.round(total),
+    city: document.getElementById("inp-city").value,
+    utm_source: getUTM(),
+    items_count: items.length,
+    created_at: new Date().toISOString()
+  };
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify(row)
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+
+    document.getElementById("suc-amount").textContent =
+      new Intl.NumberFormat("ru-RU").format(Math.round(total)) + " ₸";
+    document.getElementById("success-overlay").classList.add("show");
+
+  } catch (err) {
+    alert("Қате: " + err.message);
+    btn.disabled = false;
+    txt.textContent = t.submit;
+  }
+}
+
+// Init
+addItem();
+applyTranslations();
+</script>
+</body>
+</html>
