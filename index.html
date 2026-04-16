@@ -33,6 +33,14 @@
       box-shadow: 0 8px 20px rgba(124,106,247,0.45);
     }
     .order-btn .material-symbols-outlined { font-size: 16px; }
+
+    /* Мобильді header */
+    @media (max-width: 600px) {
+      .order-btn span:not(.material-symbols-outlined) { display: none; }
+      .order-btn { padding: 8px 12px; border-radius: 10px; min-width: 36px; justify-content: center; }
+      .order-btn .material-symbols-outlined { font-size: 18px; }
+      .logo-text p { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -65,7 +73,7 @@
   <main>
     <div class="page-title">
       <h2 id="page-h2">Заказдар Дашборды</h2>
-      <p id="page-sub">RetailCRM → Supabase • Нақты уақыттағы деректер</p>
+
     </div>
 
     <div class="kpi-grid" id="kpi-grid">
