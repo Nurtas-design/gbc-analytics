@@ -378,9 +378,108 @@ tr:last-child td { border-bottom: none; }
   .kpi-grid { grid-template-columns: repeat(2,1fr); }
   .charts-grid { grid-template-columns: 1fr; }
 }
+
 @media (max-width: 768px) {
-  main { padding: 20px; }
-  header { padding: 0 20px; }
-  .kpi-grid { grid-template-columns: 1fr 1fr; }
-  .charts-bottom { grid-template-columns: 1fr; }
+  header {
+    padding: 0 16px;
+    height: auto;
+    min-height: 60px;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .logo-text h1 { font-size: 15px; }
+  .logo-text p { font-size: 10px; }
+  .logo-icon { width: 32px; height: 32px; border-radius: 8px; }
+  .logo-icon .icon { font-size: 18px; }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .lang-btn { padding: 4px 9px; font-size: 11px; }
+  .live-badge { padding: 4px 10px; font-size: 11px; }
+  .live-dot { width: 6px; height: 6px; }
+
+  .order-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .order-btn .material-symbols-outlined { font-size: 14px; }
+
+  main { padding: 16px; }
+
+  .page-title { margin-bottom: 20px; }
+  .page-title h2 { font-size: 22px; letter-spacing: -0.5px; }
+  .page-title p { font-size: 12px; }
+
+  .kpi-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .kpi-card {
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+  .kpi-icon {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    margin-bottom: 10px;
+  }
+  .kpi-icon .icon { font-size: 17px; }
+  .kpi-label { font-size: 10px; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .kpi-value { font-size: 20px; }
+  .kpi-sub { font-size: 10px; margin-top: 5px; }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .charts-bottom {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .chart-card {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+  .chart-header { margin-bottom: 16px; }
+  .chart-title { font-size: 13px; gap: 6px; }
+  .chart-title .ui-icon {
+    width: 24px; height: 24px;
+    border-radius: 7px;
+  }
+  .chart-title .ui-icon .icon { font-size: 13px; }
+  .chart-badge { font-size: 10px; padding: 2px 8px; }
+
+  .table-card {
+    padding: 18px 14px;
+    border-radius: 14px;
+    overflow-x: auto;
+  }
+  table { min-width: 480px; }
+  th { padding: 8px 10px; font-size: 10px; }
+  td { padding: 10px 10px; font-size: 12px; }
+  .amount-cell { font-size: 12px; }
+  .city-badge { font-size: 10px; padding: 2px 8px; }
+  .utm-tag { font-size: 10px; }
+}
+
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .kpi-card { padding: 14px 12px; }
+  .kpi-value { font-size: 18px; }
+
+  header {
+    justify-content: space-between;
+  }
+  .header-right { gap: 6px; }
+  .live-badge span:not(.live-dot) { display: none; }
+  .live-badge { padding: 6px 8px; }
 }
