@@ -80,7 +80,7 @@ function applyTranslations() {
 
   set("header-sub", t.headerSub);
   set("page-h2", t.pageH2);
-  set("page-sub", t.pageSub);
+
   set("live-text", t.live);
   set("lbl-orders", t.lblOrders);
   set("sub-orders", t.subOrders);
@@ -244,6 +244,7 @@ function renderTable(orders) {
   const t = T[currentLang];
   const utmColor = {
     instagram: "#e1306c",
+    telegram: "#229ed9",
     google: "#4285f4",
     tiktok: "#010101",
     direct: "#6b7594",
